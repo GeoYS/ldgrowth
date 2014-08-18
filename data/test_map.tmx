@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="40" height="30" tilewidth="32" tileheight="32">
+ <imagelayer name="Background" width="40" height="30">
+  <image source="background.png"/>
+ </imagelayer>
+ <objectgroup name="Areas" width="40" height="30">
+  <object x="733" y="321">
+   <properties>
+    <property name="type" value="rock"/>
+   </properties>
+   <polygon points="0,0 24,52 34,210 62,264 76,344 98,379 331,548 448,549 461,441 444,345 360,242 244,172 182,160 136,116 106,71 58,29 24,9"/>
+  </object>
+  <object x="592" y="105">
+   <properties>
+    <property name="amount" value="10"/>
+    <property name="type" value="light"/>
+   </properties>
+   <polygon points="0,0 -5,44 10,75 54,120 99,150 179,176 253,187 294,208 369,216 434,242 531,296 592,303 621,226 591,152 472,88 263,36 189,1"/>
+  </object>
+  <object x="147" y="376">
+   <properties>
+    <property name="amount" value="5"/>
+    <property name="type" value="light"/>
+   </properties>
+   <polygon points="0,0 -37,87 -52,168 -43,229 -14,277 36,298 103,266 139,207 126,88 93,41 60,4 28,-7"/>
+  </object>
+  <object x="-5" y="177">
+   <properties>
+    <property name="amount" value="20"/>
+    <property name="type" value="water"/>
+   </properties>
+   <polygon points="0,0 67,14 130,48 176,102 288,228 398,328 489,404 622,525 799,621 826,656 910,682 949,683 1033,733 1102,781 1284,780 1283,706 1190,645 766,358 716,310 613,250 527,154 459,125 378,78 264,27 158,-72 5,-72"/>
+  </object>
+ </objectgroup>
+</map>
