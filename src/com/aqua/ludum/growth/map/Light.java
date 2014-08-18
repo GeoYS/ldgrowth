@@ -2,18 +2,17 @@ package com.aqua.ludum.growth.map;
 
 import java.util.List;
 
+import com.badlogic.gdx.math.Polygon;
+
 /**
  *
  * @author Duane Byer
  */
 public class Light extends Area {
     
-    public Light(List<Point> points) {
-        super(points);
+    public Light(Polygon shape, double amount) {
+        super(shape);
     }
     
-    public Light(Point[] points) {
-        super(points);
-    }
-    
+    private double amount;
 }

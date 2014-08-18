@@ -8,7 +8,12 @@ package com.aqua.ludum.growth.map;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.Map;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
+import com.badlogic.gdx.math.Polygon;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +23,41 @@ import java.util.List;
 public class Terrain {
     
     public Terrain(Map map) {
+    	rocks = new ArrayList<Rock>();
+    	lights = new ArrayList<Light>();
+    	nutrients = new ArrayList<Nutrients>();
+    	waters = new ArrayList<Water>();
+    	plants = new ArrayList<Plant>();
+    	
+    	for(int mapLayer = 0; mapLayer < map.getLayers().getCount(); mapLayer ++){
+    		MapLayer mLayer = map.getLayers().get(mapLayer);
+    		for(int mapObject = 0; mapObject < mLayer.getObjects().getCount(); mapObject ++){
+    			MapObject mObject = mLayer.getObjects().get(mapObject);
+    			if(mObject.getProperties().containsKey("type")){
+    				String type = (String) mObject.getProperties().get("type");
+    				if(type.equals("light")){
+    					double amount = Double.parseDouble((String) mObject.getProperties().get("amount"));
+    					Polygon shape = ((PolygonMapObject) mObject).getPolygon();
+    					lights.add(new Light(shape, amount));
+    				}
+    				else if(type.equals("water")){
+    					double amount = Double.parseDouble((String) mObject.getProperties().get("amount"));
+    					Polygon shape = ((PolygonMapObject) mObject).getPolygon();
+    					waters.add(new Water(shape, amount));
+    				}
+    				else if(type.equals("rock")){
+    					double amount = Double.parseDouble((String) mObject.getProperties().get("amount"));
+    					Polygon shape = ((PolygonMapObject) mObject).getPolygon();
+    					rocks.add(new Rock(shape, amount));
+    				}
+    				else if(type.equals("nutrients")){
+    					double amount = Double.parseDouble((String) mObject.getProperties().get("amount"));
+    					Polygon shape = ((PolygonMapObject) mObject).getPolygon();
+    					nutrients.add(new Nutrients(shape, amount));
+    				}
+    			}
+    		}
+    	}
     }
     
     public void update(float delta) {

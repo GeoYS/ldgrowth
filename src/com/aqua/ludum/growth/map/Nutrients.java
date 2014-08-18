@@ -2,18 +2,17 @@ package com.aqua.ludum.growth.map;
 
 import java.util.List;
 
+import com.badlogic.gdx.math.Polygon;
+
 /**
  *
  * @author duane_000
  */
 public class Nutrients extends Area {
     
-    public Nutrients(List<Point> points) {
-        super(points);
+    public Nutrients(Polygon shape, double amount) {
+        super(shape);
     }
     
-    public Nutrients(Point[] points) {
-        super(points);
-    }
-    
+    private double amount;
 }
