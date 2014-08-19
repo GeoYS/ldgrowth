@@ -21,32 +21,35 @@ public class NodeConnector {
 		this.node1 = node1;
 		this.node2 = node2;		
 
-		float x = (float) (node1.position.x - node2.position.x),
-				y = (float) (node1.position.y - node2.position.y),
+		vertices = new float[8];
+		
+		float dx = (float) (node1.position.x - node2.position.x),
+				dy = (float) (node1.position.y - node2.position.y),
 				distance;
-		distance = (float) Math.sqrt(y * y + x * x);
-		ny = - x / distance;
-		nx = y / distance;
+		
+		distance = (float) Math.sqrt(dy * dy + dx * dx);
+		ny = - dx / distance;
+		nx = dy / distance;
 				
 		renderer = new ShapeRenderer();
 	}
 	
 	private void updateVertices(){		
-		vertices[0] = (float) (nx * node1.size);
-		vertices[1] = (float) (ny * node1.size);
-		vertices[2] = (float) (nx * -node1.size);
-		vertices[3] = (float) (ny * -node1.size);
-		vertices[4] = (float) (nx * node2.size);
-		vertices[5] = (float) (ny * node2.size);
-		vertices[6] = (float) (nx * -node2.size);
-		vertices[7] = (float) (ny * -node2.size);
+		vertices[0] = (float) (nx * node1.size + node1.position.x);
+		vertices[1] = (float) (ny * node1.size + node1.position.y);
+		vertices[2] = (float) (nx * -node1.size + node1.position.x);
+		vertices[3] = (float) (ny * -node1.size + node1.position.y);
+		vertices[4] = (float) (nx * node2.size + node2.position.x);
+		vertices[5] = (float) (ny * node2.size + node2.position.y);
+		vertices[6] = (float) (nx * -node2.size + node2.position.x);
+		vertices[7] = (float) (ny * -node2.size + node2.position.y);
 	}
 	
 	public void render(SpriteBatch batch){
 		batch.end();
 		
 		renderer.setColor(Color.CYAN);
-		renderer.begin(ShapeType.Filled);
+		renderer.begin(ShapeType.Line);
 		
 		updateVertices();
 		renderer.polygon(vertices);

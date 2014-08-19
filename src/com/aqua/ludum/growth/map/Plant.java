@@ -256,7 +256,7 @@ public abstract class Plant {
             this.water = 0.0;
             this.position = position;
             this.neighbours = new Node[] {};
-            this.size = 0.0;
+            this.size = 10.0;
         }
         
         public void update(float delta) {
