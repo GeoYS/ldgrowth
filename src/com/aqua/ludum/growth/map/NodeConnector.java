@@ -30,15 +30,15 @@ public class NodeConnector {
 		renderer = new ShapeRenderer();
 	}
 	
-	private Point[] updateVertices(){		
-		vertices[0] = nx * node1.size;
-		vertices[1] = ny * node1.size;
-		vertices[2] = nx * -node1.size;
-		vertices[3] = ny * -node1.size;
-		vertices[4] = nx * node2.size;
-		vertices[5] = ny * node2.size;
-		vertices[6] = nx * -node2.size;
-		vertices[7] = ny * -node2.size;
+	private void updateVertices(){		
+		vertices[0] = (float) (nx * node1.size);
+		vertices[1] = (float) (ny * node1.size);
+		vertices[2] = (float) (nx * -node1.size);
+		vertices[3] = (float) (ny * -node1.size);
+		vertices[4] = (float) (nx * node2.size);
+		vertices[5] = (float) (ny * node2.size);
+		vertices[6] = (float) (nx * -node2.size);
+		vertices[7] = (float) (ny * -node2.size);
 	}
 	
 	public void render(SpriteBatch batch){
@@ -46,6 +46,7 @@ public class NodeConnector {
 		
 		renderer.begin(ShapeType.Filled);
 		
+		updateVertices();
 		renderer.polygon(vertices);
 		
 		renderer.end();

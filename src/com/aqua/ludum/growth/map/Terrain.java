@@ -30,7 +30,7 @@ public class Terrain {
     public Terrain(Map map) {
     	this.mapRenderer = new OrthogonalTiledMapRenderer((TiledMap) map, 1);
     	camera = new OrthographicCamera(1280, 960);
-    	camera.translate(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+    	camera.translate(Gdx.graphics.getWidth() / 2, 960 / 2);
     	camera.update();
     	this.mapRenderer.setView(camera);
     	
