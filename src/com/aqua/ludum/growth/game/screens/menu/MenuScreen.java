@@ -1,5 +1,6 @@
 package com.aqua.ludum.growth.game.screens.menu;
 
+import com.aqua.ludum.growth.map.Plant;
 import com.aqua.ludum.growth.screen.Game;
 import com.aqua.ludum.growth.screen.GameScreen;
 import com.badlogic.gdx.Gdx;
@@ -23,6 +24,8 @@ public class MenuScreen extends GameScreen{
 		Gdx.gl20.glClearColor(0,0,0,0);
 		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.draw(background, 0, 0);
+		batch.draw(Plant.PLANT_TEXTURE, 0, 0);
+		batch.draw(Plant.PLANT_ROOT_TEXTURE, 100, 100);
 		
 		batch.end();
 		

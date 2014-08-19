@@ -68,6 +68,8 @@ public class Terrain {
     			}
     		}
     	}
+    	
+    	this.plants.add(new PlayerPlant(this, new Point(500, 500)));
     }
     
     public void update(float delta) {
@@ -90,7 +92,11 @@ public class Terrain {
     
     public void render(SpriteBatch batch) {
         // render itself
+    	batch.end();
+    	
     	mapRenderer.render();
+    	
+    	batch.begin();
     	for (Plant plant : this.plants) {
             plant.render(batch);
         }

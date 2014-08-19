@@ -12,7 +12,6 @@ public class PlayerPlant extends Plant {
     
     @Override
     public void control(float delta) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

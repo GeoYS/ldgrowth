@@ -168,7 +168,7 @@ public abstract class Plant {
     
     public abstract void control(float delta);
     
-    private static final Texture PLANT_TEXTURE = new Texture(Gdx.files.internal("../LDGrowth/data/plant.png")),
+    public static final Texture PLANT_TEXTURE = new Texture(Gdx.files.internal("../LDGrowth/data/plant.png")),
     		PLANT_ROOT_TEXTURE = new Texture(Gdx.files.internal("../LDGrowth/data/plant_root.png")); 
     
     private Terrain terrain;

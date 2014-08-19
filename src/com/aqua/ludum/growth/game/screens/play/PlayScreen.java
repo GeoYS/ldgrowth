@@ -16,12 +16,7 @@ public class PlayScreen extends GameScreen{
 	private SpriteBatch batch;
 	
 	@Override
-	public void render() {
-		
-		Matrix4 tran = batch.getTransformMatrix();
-		tran.translate(-Gdx.graphics.getWidth() / 2, -Gdx.graphics.getHeight() / 2, 0);
-		batch.setTransformMatrix(tran);	
-		
+	public void render() {		
 		batch.begin();
 		
 		Gdx.gl20.glClearColor(0,0,0,0);
