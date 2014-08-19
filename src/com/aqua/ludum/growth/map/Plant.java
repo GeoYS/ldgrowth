@@ -1,6 +1,8 @@
 package com.aqua.ludum.growth.map;
 
 import com.aqua.ludum.growth.Constants;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,6 +28,12 @@ public abstract class Plant {
     }
     
     public final void render(SpriteBatch batch) {
+    	for(Node node : this.nodes){
+    		double x = node.position.x, y = node.position.y;
+    		batch.draw(PLANT_TEXTURE, (float)x, (float)y);
+    	}
+    	double rootx = this.root.position.x, rooty = this.root.position.y;
+    	batch.draw(PLANT_ROOT_TEXTURE, (float)rootx, (float)rooty);
     }
     
     public final void update(float delta) {
@@ -139,6 +147,9 @@ public abstract class Plant {
     }
     
     public abstract void control(float delta);
+    
+    private static final Texture PLANT_TEXTURE = new Texture(Gdx.files.internal("../LDGrowth/data/plant.png")),
+    		PLANT_ROOT_TEXTURE = new Texture(Gdx.files.internal("../LDGrowth/data/plant_root.png")); 
     
     private Terrain terrain;
     private Node root;

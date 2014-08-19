@@ -6,6 +6,7 @@
 
 package com.aqua.ludum.growth.map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.Map;
@@ -27,8 +28,11 @@ import java.util.List;
 public class Terrain {
     
     public Terrain(Map map) {
-    	this.mapRenderer = new OrthogonalTiledMapRenderer((TiledMap) map, 1f/4f);
-    	this.mapRenderer.setView(new OrthographicCamera(1280, 960));
+    	this.mapRenderer = new OrthogonalTiledMapRenderer((TiledMap) map, 1);
+    	camera = new OrthographicCamera(1280, 960);
+    	camera.translate(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+    	camera.update();
+    	this.mapRenderer.setView(camera);
     	
     	rocks = new ArrayList<Rock>();
     	lights = new ArrayList<Light>();
@@ -112,5 +116,6 @@ public class Terrain {
     private List<Plant> plants;
     
     private TiledMapRenderer mapRenderer;
+    private OrthographicCamera camera;
     
 }

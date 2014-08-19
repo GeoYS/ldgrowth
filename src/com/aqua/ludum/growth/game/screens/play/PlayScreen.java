@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
 
 public class PlayScreen extends GameScreen{
 
@@ -16,6 +17,11 @@ public class PlayScreen extends GameScreen{
 	
 	@Override
 	public void render() {
+		
+		Matrix4 tran = batch.getTransformMatrix();
+		tran.translate(-Gdx.graphics.getWidth() / 2, -Gdx.graphics.getHeight() / 2, 0);
+		batch.setTransformMatrix(tran);	
+		
 		batch.begin();
 		
 		Gdx.gl20.glClearColor(0,0,0,0);
