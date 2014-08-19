@@ -12,7 +12,12 @@ public class Light extends Area {
     
     public Light(Polygon shape, double amount) {
         super(shape);
+        this.amount = amount;
     }
     
-    private double amount;
+    public double getAmount() {
+        return this.amount;
+    }
+    
+    private final double amount;
 }
