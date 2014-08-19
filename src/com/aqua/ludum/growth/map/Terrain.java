@@ -86,7 +86,7 @@ public class Terrain {
     
     public void render(SpriteBatch batch) {
         // render itself
-    	mapRenderer.render();    
+    	mapRenderer.render();
     	for (Plant plant : this.plants) {
             plant.render(batch);
         }
