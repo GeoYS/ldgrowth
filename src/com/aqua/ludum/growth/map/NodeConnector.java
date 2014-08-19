@@ -1,13 +1,14 @@
 package com.aqua.ludum.growth.map;
 
 import com.aqua.ludum.growth.map.Plant.Node;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class NodeConnector {
 	
-	private Node node1, node2;
+	public Node node1, node2;
 	private ShapeRenderer renderer;
 	private float[] vertices;
 	
@@ -44,6 +45,7 @@ public class NodeConnector {
 	public void render(SpriteBatch batch){
 		batch.end();
 		
+		renderer.setColor(Color.CYAN);
 		renderer.begin(ShapeType.Filled);
 		
 		updateVertices();
@@ -52,5 +54,14 @@ public class NodeConnector {
 		renderer.end();
 		
 		batch.begin();
+	}
+	
+	public boolean equals(NodeConnector nodeConnector){
+		if(node1 == nodeConnector.node1 || node1 == nodeConnector.node2){
+			if(node2 == nodeConnector.node1 || node2 == nodeConnector.node2){
+				return true;
+			}
+		}
+		return false;
 	}
 }

@@ -19,6 +19,7 @@ public abstract class Plant {
     
     public Plant(Terrain terrain, Point position) {
         this.terrain = terrain;
+        this.nodeConnectors = new ArrayList<>();
         this.growths = new ArrayList<>();
         this.removals = new ArrayList<>();
         this.rootRemovals = new ArrayList<>();
@@ -40,6 +41,9 @@ public abstract class Plant {
     }
     
     public final void render(SpriteBatch batch) {
+    	for(NodeConnector nodeConnector : nodeConnectors){
+    		nodeConnector.render(batch);
+    	}
     	for(Node node : this.nodes){
     		double x = node.position.x, y = node.position.y;
     		batch.draw(PLANT_TEXTURE, (float)x, (float)y);
@@ -117,6 +121,8 @@ public abstract class Plant {
     }
     
     private void addConnection(Node a, Node b) {
+    	nodeConnectors.add(new NodeConnector(a, b));
+    	
         Node[] neighboursA = a.neighbours;
         Node[] neighboursB = b.neighbours;
         a.neighbours = new Node[a.neighbours.length + 1];
@@ -145,6 +151,17 @@ public abstract class Plant {
         if (aIndex == -1) {
             return;
         }
+        
+        ListIterator<NodeConnector> it = nodeConnectors.listIterator();
+        while(it.hasNext()){
+        	NodeConnector nodeConnector = it.next();
+        	if(nodeConnector.node1 == a || nodeConnector.node1 == b){
+        		if(nodeConnector.node2 == a || nodeConnector.node2 == b){
+            		it.remove();
+            	}
+        	}
+        }
+        
         Node[] neighboursA = a.neighbours;
         Node[] neighboursB = b.neighbours;
         a.neighbours = new Node[a.neighbours.length - 1];
@@ -234,6 +251,7 @@ public abstract class Plant {
     private final List<Growth> growths;
     private final List<Removal> removals;
     private final List<NotConnectedToRootRemoval> rootRemovals;
+    private final List<NodeConnector> nodeConnectors;
     public static final Texture PLANT_TEXTURE = new Texture(Gdx.files.internal("../LDGrowth/data/plant.png")),
     		PLANT_ROOT_TEXTURE = new Texture(Gdx.files.internal("../LDGrowth/data/plant_root.png"));
     
