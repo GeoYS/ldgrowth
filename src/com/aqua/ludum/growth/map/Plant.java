@@ -63,21 +63,27 @@ public abstract class Plant {
                     (target.position.x - node.position.x) * (target.position.x - node.position.x) +
                     (target.position.y - node.position.y) * (target.position.y - node.position.y) <
                     Constants.PLANT_NODE_DISTANCE * Constants.PLANT_NODE_DISTANCE;
-            Node next;
-            if (!atTarget) {
+            Node next = null;
+            if (atTarget) {
+                if (growth.isAttack) {
+                }
+                else {
+                    next = new Node(nextPosition, new Node[] { node, target });
+                    this.nodes.add(next);
+                    if (!this.nodes.contains(target)) {
+                        this.nodes.add(target);
+                    }
+                    insertNeighbour(target, next);
+                    itGrowth.remove();
+                }
+            }
+            else {
                 next = new Node(nextPosition, new Node[] { node });
                 this.nodes.add(next);
             }
-            else {
-                next = new Node(nextPosition, new Node[] { node, target });
-                this.nodes.add(next);
-                if (!this.nodes.contains(target)) {
-                    this.nodes.add(target);
-                }
-                insertNeighbour(target, next);
-                itGrowth.remove();
+            if (next != null) {
+                insertNeighbour(node, next);
             }
-            insertNeighbour(node, next);
             growth.node = next;
         }
         
@@ -126,14 +132,14 @@ public abstract class Plant {
         return new Point(position.x + normX * Constants.PLANT_NODE_DISTANCE, position.y + normY * Constants.PLANT_NODE_DISTANCE);
     }
     
-    private boolean connectedToRoot(Node node) {
+    private static boolean areConnected(Node a, Node b) {
         Set<Node> visited = new HashSet<>();
         Set<Node> toVisit = new HashSet<>();
-        toVisit.add(node);
+        toVisit.add(a);
         while (!toVisit.isEmpty()) {
             Set<Node> nextToVisit = new HashSet<>();
             for (Node next : toVisit) {
-                if (next == this.root) {
+                if (next == b) {
                     return true;
                 }
                 else {
@@ -148,6 +154,10 @@ public abstract class Plant {
             toVisit = nextToVisit;
         }
         return false;
+    }
+    
+    private boolean connectedToRoot(Node node) {
+        return areConnected(node, this.root);
     }
     
     protected final void growTowards(Node from, Node target) {
@@ -168,15 +178,14 @@ public abstract class Plant {
     
     public abstract void control(float delta);
     
+    private final Terrain terrain;
+    private final Node root;
+    private final List<Node> nodes;
+    private final List<Growth> growths;
+    private final List<Removal> removals;
+    private final List<NotConnectedToRootRemoval> rootRemovals;
     public static final Texture PLANT_TEXTURE = new Texture(Gdx.files.internal("../LDGrowth/data/plant.png")),
-    		PLANT_ROOT_TEXTURE = new Texture(Gdx.files.internal("../LDGrowth/data/plant_root.png")); 
-    
-    private Terrain terrain;
-    private Node root;
-    private List<Node> nodes;
-    private List<Growth> growths;
-    private List<Removal> removals;
-    private List<NotConnectedToRootRemoval> rootRemovals;
+    		PLANT_ROOT_TEXTURE = new Texture(Gdx.files.internal("../LDGrowth/data/plant_root.png"));
     
     protected class Node {
         
@@ -186,14 +195,54 @@ public abstract class Plant {
             this.water = 0.0;
             this.position = position;
             this.neighbours = neighbours;
+            this.size = 0.0;
         }
         
         public void update(float delta) {
+            for (Light light : terrain.getLights()) {
+                if (light.contains(this.position)) {
+                    this.light += light.getAmount() * Constants.PLANT_LIGHT_PER_SIZE * this.size;
+                }
+            }
+            for (Nutrients nutrients : terrain.getNutrients()) {
+                if (nutrients.contains(this.position)) {
+                    this.nutrients += nutrients.getAmount() * Constants.PLANT_NUTRIENTS_PER_SIZE * this.size;
+                }
+            }
+            for (Water water : terrain.getWaters()) {
+                if (water.contains(this.position)) {
+                    this.water += water.getAmount() * Constants.PLANT_WATER_PER_SIZE * this.size;
+                }
+            }
+            this.light += Constants.PLANT_MIN_LIGHT * Constants.PLANT_LIGHT_PER_SIZE * this.size;
+            this.water += Constants.PLANT_MIN_WATER * Constants.PLANT_WATER_PER_SIZE * this.size;
+            this.nutrients += Constants.PLANT_MIN_NUTRIENTS * Constants.PLANT_NUTRIENTS_PER_SIZE * this.size;
+            double lightGift = this.light * Constants.PLANT_TRANSFER_LIGHT;
+            double waterGift = this.water * Constants.PLANT_TRANSFER_WATER;
+            double nutrientsGift = this.nutrients * Constants.PLANT_TRANSFER_NUTRIENTS;
+            this.light -= lightGift;
+            this.water -= waterGift;
+            this.nutrients -= nutrientsGift;
+            for (Node neighbour : this.neighbours) {
+                neighbour.light += lightGift / this.neighbours.length;
+                neighbour.water += waterGift / this.neighbours.length;
+                neighbour.nutrients += nutrientsGift / this.neighbours.length;
+            }
+            this.light -= this.size * Constants.PLANT_COST_LIGHT_PER_SIZE;
+            this.water -= this.size * Constants.PLANT_COST_WATER_PER_SIZE;
+            this.nutrients -= this.size * Constants.PLANT_COST_NUTRIENTS_PER_SIZE;
+            
+            if (this.light < 0 || this.water < 0 || this.nutrients < 0) {
+                List<Node> list = new ArrayList<>(1);
+                list.add(this);
+                removals.add(new Removal(list));
+            }
         }
         
         public double nutrients;
         public double light;
         public double water;
+        public double size;
         
         public Point position;
         public Node[] neighbours;
@@ -205,10 +254,12 @@ public abstract class Plant {
         public Growth(Node node, Node target) {
             this.node = node;
             this.target = target;
+            this.isAttack = target.neighbours.length != 0 && !areConnected(node, target);
         }
         
         public Node node;
         public Node target;
+        public boolean isAttack;
         
     }
     
