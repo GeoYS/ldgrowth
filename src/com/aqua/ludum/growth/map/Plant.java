@@ -23,6 +23,18 @@ public abstract class Plant {
         this.root = new Node(position, new Node[] { } );
         this.nodes = new ArrayList<>();
         this.nodes.add(this.root);
+        
+        for (int i = 0; i < Constants.PLANT_START_ARM_COUNT; ++i) {
+            for (int j = 0; j < Constants.PLANT_START_ARM_LENGTH; ++j) {
+                Node last = j == 0 ? this.root : this.nodes.get(this.nodes.size() - 1);
+                Node next = new Node(new Point(
+                        position.x + (j + 1) * Constants.PLANT_NODE_DISTANCE * Math.cos((double) i / Constants.PLANT_START_ARM_COUNT * 2.0 * Math.PI + Constants.PLANT_START_ARM_SPIRAL * j),
+                        position.y + (j + 1) * Constants.PLANT_NODE_DISTANCE * Math.sin((double) i / Constants.PLANT_START_ARM_COUNT * 2.0 * Math.PI + Constants.PLANT_START_ARM_SPIRAL * j)),
+                        new Node[] { last });
+                insertNeighbour(last, next);
+                this.nodes.add(next);
+            }
+        }
     }
     
     public final void render(SpriteBatch batch) {
@@ -138,6 +150,14 @@ public abstract class Plant {
         this.removals.add(new Removal(nodes));
     }
     
+    protected final List<Node> getNodes() {
+        return this.nodes;
+    }
+    
+    protected final Node getRoot() {
+        return this.root;
+    }
+    
     public abstract void control(float delta);
     
     private Terrain terrain;
@@ -147,7 +167,7 @@ public abstract class Plant {
     private List<Removal> removals;
     private List<NotConnectedToRootRemoval> rootRemovals;
     
-    private class Node {
+    protected class Node {
         
         public Node(Point position, Node[] neighbours) {
             this.nutrients = 0.0;
