@@ -6,11 +6,15 @@
 
 package com.aqua.ludum.growth.map;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
 
 import java.util.ArrayList;
@@ -23,6 +27,9 @@ import java.util.List;
 public class Terrain {
     
     public Terrain(Map map) {
+    	this.mapRenderer = new OrthogonalTiledMapRenderer((TiledMap) map, 1f/4f);
+    	this.mapRenderer.setView(new OrthographicCamera(1280, 960));
+    	
     	rocks = new ArrayList<Rock>();
     	lights = new ArrayList<Light>();
     	nutrients = new ArrayList<Nutrients>();
@@ -46,9 +53,8 @@ public class Terrain {
     					waters.add(new Water(shape, amount));
     				}
     				else if(type.equals("rock")){
-    					double amount = Double.parseDouble((String) mObject.getProperties().get("amount"));
     					Polygon shape = ((PolygonMapObject) mObject).getPolygon();
-    					rocks.add(new Rock(shape, amount));
+    					rocks.add(new Rock(shape));
     				}
     				else if(type.equals("nutrients")){
     					double amount = Double.parseDouble((String) mObject.getProperties().get("amount"));
@@ -80,7 +86,8 @@ public class Terrain {
     
     public void render(SpriteBatch batch) {
         // render itself
-        for (Plant plant : this.plants) {
+    	mapRenderer.render();    
+    	for (Plant plant : this.plants) {
             plant.render(batch);
         }
         for (Rock rock : this.rocks) {
@@ -103,5 +110,7 @@ public class Terrain {
     private List<Water> waters;
     
     private List<Plant> plants;
+    
+    private TiledMapRenderer mapRenderer;
     
 }

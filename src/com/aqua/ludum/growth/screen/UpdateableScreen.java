@@ -32,6 +32,10 @@ public abstract class UpdateableScreen implements Screen, InputProcessor{
 	public void dispose() {
 	}
 	
+	/**
+	 * Called when the Screen is no longer the current Screen for a Game.
+	 * Synonymous with "onExit()"
+	 */
 	@Override
 	public void hide() {
 	}
@@ -48,6 +52,10 @@ public abstract class UpdateableScreen implements Screen, InputProcessor{
 	public void resume() {
 	}
 	
+	/**
+	 * Called when the Screen becomes the current Screen for a Game.
+	 * Synonyous with "onEnter()"
+	 */
 	@Override
 	public void show() {
 	}

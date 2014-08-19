@@ -106,18 +106,18 @@ public abstract class Game implements ApplicationListener, InputProcessor{
 		if(previousScreen != null && previousScreen instanceof GameScreen){
 			GameScreen prevGameScreen = (GameScreen) previousScreen;
 			if(!prevGameScreen.outTransitionFinished()){
-				System.out.println("transitioning");
+				//System.out.println("transitioning");
 				return true;
 			}
 		}
 		if(currentScreen instanceof GameScreen){
 			GameScreen currGameScreen = (GameScreen) currentScreen;
 			if(!currGameScreen.inTransitionFinished()){
-				System.out.println("transitioning");
+				//System.out.println("transitioning");
 				return true;
 			}
 		}
-		System.out.println("Not transitioning");
+		//System.out.println("Not transitioning");
 		return false;
 	}	
 
