@@ -29,6 +29,7 @@ public abstract class Plant {
     }
     
     public final void update(float delta) {
+        control(delta);
         for (Node node : this.nodes) {
             node.update(delta);
         }
