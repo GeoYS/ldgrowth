@@ -26,6 +26,10 @@ public abstract class Area {
     	return shape;
     }
     
+    public boolean contains(Point point) {
+        return shape.contains((float) point.x, (float) point.y);
+    }
+    
     private final Polygon shape;
     
 }
