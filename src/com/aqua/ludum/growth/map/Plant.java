@@ -25,10 +25,10 @@ public abstract class Plant {
         this.nodes.add(this.root);
     }
     
-    public void render(SpriteBatch batch) {
+    public final void render(SpriteBatch batch) {
     }
     
-    public void update(float delta) {
+    public final void update(float delta) {
         for (Node node : this.nodes) {
             node.update(delta);
         }
@@ -129,11 +129,11 @@ public abstract class Plant {
         return false;
     }
     
-    protected void growTowards(Node from, Node target) {
+    protected final void growTowards(Node from, Node target) {
         this.growths.add(new Growth(from, target));
     }
     
-    protected void destroy(List<Node> nodes) {
+    protected final void destroy(List<Node> nodes) {
         this.removals.add(new Removal(nodes));
     }
     
