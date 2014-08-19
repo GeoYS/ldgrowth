@@ -22,19 +22,18 @@ public abstract class Plant {
         this.growths = new ArrayList<>();
         this.removals = new ArrayList<>();
         this.rootRemovals = new ArrayList<>();
-        this.root = new Node(position, new Node[] { } );
+        this.root = new Node(position);
         this.nodes = new ArrayList<>();
-        this.nodes.add(this.root);
+        addNode(this.root);
         
         for (int i = 0; i < Constants.PLANT_START_ARM_COUNT; ++i) {
             for (int j = 0; j < Constants.PLANT_START_ARM_LENGTH; ++j) {
                 Node last = j == 0 ? this.root : this.nodes.get(this.nodes.size() - 1);
                 Node next = new Node(new Point(
                         position.x + (j + 1) * Constants.PLANT_NODE_DISTANCE * Math.cos((double) i / Constants.PLANT_START_ARM_COUNT * 2.0 * Math.PI + Constants.PLANT_START_ARM_SPIRAL * j),
-                        position.y + (j + 1) * Constants.PLANT_NODE_DISTANCE * Math.sin((double) i / Constants.PLANT_START_ARM_COUNT * 2.0 * Math.PI + Constants.PLANT_START_ARM_SPIRAL * j)),
-                        new Node[] { last });
-                insertNeighbour(last, next);
-                this.nodes.add(next);
+                        position.y + (j + 1) * Constants.PLANT_NODE_DISTANCE * Math.sin((double) i / Constants.PLANT_START_ARM_COUNT * 2.0 * Math.PI + Constants.PLANT_START_ARM_SPIRAL * j)));
+                addNode(next);
+                addConnection(last, next);
             }
         }
     }
@@ -68,23 +67,24 @@ public abstract class Plant {
                 if (growth.isAttack) {
                 }
                 else {
-                    next = new Node(nextPosition, new Node[] { node, target });
-                    this.nodes.add(next);
+                    next = new Node(nextPosition);
+                    addNode(next);
+                    addConnection(node, next);
+                    addConnection(next, target);
                     if (!this.nodes.contains(target)) {
-                        this.nodes.add(target);
+                        addNode(target);
                     }
-                    insertNeighbour(target, next);
                     itGrowth.remove();
                 }
             }
             else {
-                next = new Node(nextPosition, new Node[] { node });
-                this.nodes.add(next);
+                next = new Node(nextPosition);
+                addNode(next);
+                addConnection(node, next);
             }
             if (next != null) {
-                insertNeighbour(node, next);
+                growth.node = next;
             }
-            growth.node = next;
         }
         
         for (Removal removal : this.removals) {
@@ -97,7 +97,7 @@ public abstract class Plant {
                     }
                 }
                 if (node != this.root) {
-                    this.nodes.remove(node);
+                    removeNode(node);
                 }
             }
         }
@@ -106,7 +106,7 @@ public abstract class Plant {
         ListIterator<NotConnectedToRootRemoval> itRemoval = this.rootRemovals.listIterator();
         while (itRemoval.hasNext()) {
             NotConnectedToRootRemoval removal = itRemoval.next();
-            this.nodes.remove(removal.node);
+            removeNode(removal.node);
             for (Node neighbour : removal.node.neighbours) {
                 if (this.nodes.contains(neighbour)) {
                     itRemoval.add(new NotConnectedToRootRemoval(neighbour));
@@ -164,13 +164,6 @@ public abstract class Plant {
             removeConnection(a, neighbour);
         }
         this.nodes.remove(a);
-    }
-    
-    private void insertNeighbour(Node node, Node newNeighbour) {
-        Node[] neighbours = node.neighbours;
-        node.neighbours = new Node[node.neighbours.length + 1];
-        System.arraycopy(neighbours, 0, node.neighbours, 1, neighbours.length);
-        node.neighbours[0] = newNeighbour;
     }
     
     private Point nextGrowPosition(Point position, Point target) {
@@ -239,12 +232,12 @@ public abstract class Plant {
     
     protected class Node {
         
-        public Node(Point position, Node[] neighbours) {
+        public Node(Point position) {
             this.nutrients = 0.0;
             this.light = 0.0;
             this.water = 0.0;
             this.position = position;
-            this.neighbours = neighbours;
+            this.neighbours = new Node[] {};
             this.size = 0.0;
         }
         
