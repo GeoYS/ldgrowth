@@ -114,6 +114,22 @@ public class Terrain {
         }
     }
     
+    public List<Rock> getRocks() {
+        return this.rocks;
+    }
+    
+    public List<Light> getLights() {
+        return this.lights;
+    }
+    
+    public List<Nutrients> getNutrients() {
+        return this.nutrients;
+    }
+    
+    public List<Water> getWaters() {
+        return this.waters;
+    }
+    
     private List<Rock> rocks;
     private List<Light> lights;
     private List<Nutrients> nutrients;
