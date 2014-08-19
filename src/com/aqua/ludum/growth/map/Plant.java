@@ -116,6 +116,56 @@ public abstract class Plant {
         }
     }
     
+    private void addConnection(Node a, Node b) {
+        Node[] neighboursA = a.neighbours;
+        Node[] neighboursB = b.neighbours;
+        a.neighbours = new Node[a.neighbours.length + 1];
+        b.neighbours = new Node[b.neighbours.length + 1];
+        System.arraycopy(neighboursA, 0, a.neighbours, 1, neighboursA.length);
+        System.arraycopy(neighboursB, 0, b.neighbours, 1, neighboursB.length);
+        a.neighbours[0] = b;
+        b.neighbours[0] = a;
+    }
+    
+    private void removeConnection(Node a, Node b) {
+        int bIndex = -1;
+        for (int i = 0; i < a.neighbours.length; ++i) {
+            if (a.neighbours[i] == b) {
+                bIndex = i;
+                break;
+            }
+        }
+        int aIndex = -1;
+        for (int i = 0; i < b.neighbours.length; ++i) {
+            if (b.neighbours[i] == a) {
+                aIndex = i;
+                break;
+            }
+        }
+        if (aIndex == -1) {
+            return;
+        }
+        Node[] neighboursA = a.neighbours;
+        Node[] neighboursB = b.neighbours;
+        a.neighbours = new Node[a.neighbours.length - 1];
+        b.neighbours = new Node[b.neighbours.length - 1];
+        System.arraycopy(neighboursA, 0, a.neighbours, 0, bIndex);
+        System.arraycopy(neighboursB, 0, b.neighbours, 0, aIndex);
+        System.arraycopy(neighboursA, bIndex + 1, a.neighbours, bIndex, neighboursA.length - bIndex - 1);
+        System.arraycopy(neighboursB, aIndex + 1, b.neighbours, aIndex, neighboursB.length - aIndex - 1);
+    }
+    
+    private void addNode(Node a) {
+        this.nodes.add(a);
+    }
+    
+    private void removeNode(Node a) {
+        for (Node neighbour : a.neighbours) {
+            removeConnection(a, neighbour);
+        }
+        this.nodes.remove(a);
+    }
+    
     private void insertNeighbour(Node node, Node newNeighbour) {
         Node[] neighbours = node.neighbours;
         node.neighbours = new Node[node.neighbours.length + 1];
