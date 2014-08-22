@@ -3,10 +3,8 @@ package com.aqua.ludum.growth.game.screens.play;
 import com.aqua.ludum.growth.screen.Game;
 import com.aqua.ludum.growth.screen.GameScreen;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Matrix4;
 
 public class PlayScreen extends GameScreen{
 

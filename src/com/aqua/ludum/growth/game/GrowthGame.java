@@ -11,7 +11,7 @@ public class GrowthGame extends Game{
 		this.addScreen(new MenuScreen());
 		this.addScreen(new PlayScreen());
 		this.initScreens();
-		this.enterScreen(MenuScreen.ID);
+		this.enterScreen(PlayScreen.ID);
 	}
 
 }

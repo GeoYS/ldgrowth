@@ -2,6 +2,7 @@ package com.aqua.ludum.growth.map;
 
 import com.aqua.ludum.growth.Constants;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.Set;
 public abstract class Plant {
     
     public Plant(Terrain terrain, Point position) {
+    	this.nodeRenderer = new NodeRenderer();
         this.terrain = terrain;
         this.nodeConnectors = new ArrayList<>();
         this.growths = new ArrayList<>();
@@ -39,16 +41,31 @@ public abstract class Plant {
         }
     }
     
-    public final void render(SpriteBatch batch) {
+    public  abstract void render(SpriteBatch batch);
+    
+    /**
+     * Color does not do anything at the moment.
+     * @param batch
+     * @param color
+     */
+    public final void renderPlant(SpriteBatch batch, Color color){
+    	// draw connections between nodes
+    	batch.end();
     	for(NodeConnector nodeConnector : nodeConnectors){
     		nodeConnector.render(batch);
     	}
+    	nodeRenderer.begin();
     	for(Node node : this.nodes){
-    		double x = node.position.x, y = node.position.y;
-    		batch.draw(PLANT_TEXTURE, (float)x, (float)y);
+    		nodeRenderer.draw(node);
     	}
+    	nodeRenderer.end();
+    	batch.begin();
+    	/*for(Node node : this.nodes){
+    		double x = node.position.x, y = node.position.y;
+    		batch.draw(PLANT_TEXTURE, (float)(x - PLANT_TEXTURE.getWidth() / 2), (float)(y - PLANT_TEXTURE.getHeight() / 2));
+    	}*/
     	double rootx = this.root.position.x, rooty = this.root.position.y;
-    	batch.draw(PLANT_ROOT_TEXTURE, (float)rootx, (float)rooty);
+    	batch.draw(PLANT_ROOT_TEXTURE, (float)(rootx - PLANT_TEXTURE.getWidth() / 2), (float)(rooty - PLANT_TEXTURE.getHeight() / 2));
     }
     
     public final void update(float delta) {
@@ -245,6 +262,7 @@ public abstract class Plant {
     private final List<Removal> removals;
     private final List<NotConnectedToRootRemoval> rootRemovals;
     private final List<NodeConnector> nodeConnectors;
+    private final NodeRenderer nodeRenderer;
     public static final Texture PLANT_TEXTURE = new Texture(Gdx.files.internal("../LDGrowth/data/plant.png")),
     		PLANT_ROOT_TEXTURE = new Texture(Gdx.files.internal("../LDGrowth/data/plant_root.png"));
     
@@ -256,7 +274,7 @@ public abstract class Plant {
             this.water = 0.0;
             this.position = position;
             this.neighbours = new Node[] {};
-            this.size = 10.0;
+            this.size = 3.0;
         }
         
         public void update(float delta) {

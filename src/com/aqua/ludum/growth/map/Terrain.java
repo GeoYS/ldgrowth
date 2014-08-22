@@ -29,8 +29,8 @@ public class Terrain {
     
     public Terrain(Map map) {
     	this.mapRenderer = new OrthogonalTiledMapRenderer((TiledMap) map, 1);
-    	camera = new OrthographicCamera(1280, 960);
-    	camera.translate(Gdx.graphics.getWidth() / 2, 960 / 2);
+    	camera = new OrthographicCamera(960, 640);
+    	camera.translate(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
     	camera.update();
     	this.mapRenderer.setView(camera);
     	
@@ -69,7 +69,7 @@ public class Terrain {
     		}
     	}
     	
-    	this.plants.add(new PlayerPlant(this, new Point(500, 500)));
+    	this.plants.add(new PlayerPlant(this, new Point(50, 50)));
     }
     
     public void update(float delta) {
@@ -97,9 +97,6 @@ public class Terrain {
     	mapRenderer.render();
     	
     	batch.begin();
-    	for (Plant plant : this.plants) {
-            plant.render(batch);
-        }
         for (Rock rock : this.rocks) {
             rock.render(batch);
         }
@@ -111,6 +108,9 @@ public class Terrain {
         }
         for (Water water : this.waters) {
             water.render(batch);
+        }
+    	for (Plant plant : this.plants) {
+            plant.render(batch);
         }
     }
     
